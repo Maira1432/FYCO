@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control Interno & Riesgos — Sesión 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f0e8;
+    --accent: #e8390e;
+    --gold: #d4a017;
+    --teal: #0a6b6b;
+    --soft: #e8e2d6;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 24px 60px;
+  }
+
+  /* HEADER */
+  .header {
+    max-width: 960px;
+    margin: 0 auto 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 24px;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 20px;
+  }
+
+  .session-tag {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  h1 span {
+    display: block;
+    color: var(--teal);
+  }
+
+  .header-meta {
+    text-align: right;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.8;
+  }
+
+  .header-meta strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  /* INTRO STRIP */
+  .intro-strip {
+    max-width: 960px;
+    margin: 0 auto 40px;
+    background: var(--ink);
+    color: var(--white);
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-radius: 4px;
+  }
+
+  .intro-strip .icon {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+
+  .intro-strip p {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.9;
+  }
+
+  .intro-strip strong {
+    color: var(--gold);
+  }
+
+  /* SECTION LABELS */
+  .section-label {
+    max-width: 960px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  .section-label .title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #555;
+  }
+
+  /* BIG DEFINITION CARD */
+  .def-card {
+    max-width: 960px;
+    margin: 0 auto 40px;
+    background: var(--teal);
+    color: white;
+    padding: 36px 40px;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .def-card::before {
+    content: '❝';
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    font-size: 120px;
+    opacity: 0.08;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .def-card .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 12px;
+  }
+
+  .def-card .def-text {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+
+  .def-card .def-text em {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  .def-card .def-sub {
+    font-size: 13px;
+    opacity: 0.8;
+    line-height: 1.6;
+    max-width: 600px;
+  }
+
+  /* GRID CARDS */
+  .grid {
+    max-width: 960px;
+    margin: 0 auto 40px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+  @media (max-width: 700px) {
+    .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 6px;
+    padding: 24px;
+    border: 1.5px solid #ddd6c8;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+
+  .card .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .card p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #444;
+  }
+
+  .card .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+
+  .tag-risk { background: #fde8e3; color: var(--accent); }
+  .tag-control { background: #e3f0f0; color: var(--teal); }
+  .tag-key { background: #fdf6e3; color: #8a6900; }
+
+  /* CHAIN / FLOW */
+  .chain {
+    max-width: 960px;
+    margin: 0 auto 40px;
+    background: var(--white);
+    border: 1.5px solid #ddd6c8;
+    border-radius: 6px;
+    padding: 28px;
+  }
+
+  .chain-steps {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  .chain-step {
+    flex: 1;
+    min-width: 140px;
+    padding: 16px 20px;
+    text-align: center;
+    position: relative;
+  }
+
+  .chain-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--accent);
+    font-weight: 700;
+    z-index: 1;
+  }
+
+  .chain-step .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--soft);
+    -webkit-text-stroke: 2px var(--ink);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .chain-step h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--teal);
+  }
+
+  .chain-step p {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.4;
+  }
+
+  /* EQUATION */
+  .equation-block {
+    max-width: 960px;
+    margin: 0 auto 40px;
+    background: var(--ink);
+    color: white;
+    border-radius: 6px;
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .eq-item {
+    text-align: center;
+  }
+
+  .eq-item .eq-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .eq-item .eq-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .eq-item .eq-sub {
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 3px;
+  }
+
+  .eq-op {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    opacity: 0.7;
+  }
+
+  /* QUOTE PULL */
+  .pull-quote {
+    max-width: 960px;
+    margin: 0 auto 40px;
+    border-left: 6px solid var(--gold);
+    padding: 16px 24px;
+    background: #fdf8ee;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .pull-quote p {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .pull-quote span {
+    font-size: 12px;
+    color: #888;
+    font-style: italic;
+  }
+
+  /* MATRIX */
+  .matrix-block {
+    max-width: 960px;
+    margin: 0 auto 40px;
+  }
+
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px;
+    /*background: var(--ink);*/
+    border-radius: 6px;
+    overflow: hidden;
+    padding: 4px;
+  }
+
+  .matrix-cell {
+    padding: 20px 22px;
+    border-radius: 4px;
+  }
+
+  .mc-tl { background: #1a6b3a; color: white; }
+  .mc-tr { background: #e8390e; color: white; }
+  .mc-bl { background: #e8e2d6; color: var(--ink); }
+  .mc-br { background: #0a6b6b; color: white; }
+
+  .matrix-cell .mc-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .matrix-cell ul {
+    list-style: none;
+    font-size: 12px;
+    line-height: 1.7;
+    opacity: 0.9;
+  }
+
+  .matrix-cell ul li::before {
+    content: '— ';
+    opacity: 0.5;
+  }
+
+  /* APPETITE SCALE */
+  .scale-block {
+    max-width: 960px;
+    margin: 0 auto 40px;
+    background: var(--white);
+    border: 1.5px solid #ddd6c8;
+    border-radius: 6px;
+    padding: 28px;
+  }
+
+  .scale-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .scale-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    height: 50px;
+  }
+
+  .scale-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: white;
+  }
+
+  .seg-1 { background: #1a6b3a; }
+  .seg-2 { background: #d4a017; color: var(--ink); }
+  .seg-3 { background: #e8390e; }
+  .seg-4 { background: #6b0000; }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #888;
+  }
+
+  .scale-note {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+    background: var(--soft);
+    padding: 12px 16px;
+    border-radius: 4px;
+  }
+
+  /* FOOTER */
+  .footer-strip {
+    max-width: 960px;
+    margin: 48px auto 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 20px;
+    border-top: 2px solid #ddd6c8;
+    padding-top: 20px;
+  }
+
+  .footer-strip p {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.6;
+  }
+
+  .next-session {
+    background: var(--accent);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .next-session .ns-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 2px;
+  }
+
+  .next-session .ns-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .def-card, .chain, .equation-block, .grid, .pull-quote, .scale-block {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  /* PRINT */
+  @media print {
+    body { padding: 20px; }
+    .card:hover { transform: none; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div>
+    <div class="session-tag">📋 Capacitación · Sesión 1 de 3</div>
+    <h1>Control Interno<span>& Gestión de Riesgos</span></h1>
+  </div>
+  <div class="header-meta">
+    <strong>Facilitador: Wilington Olarte</strong>
+    Próxima sesión: El Control<br>
+    Sesión 3: COSO-RM & Códigos de Conducta
+  </div>
+</header>
+
+<!-- INTRO STRIP -->
+<div class="intro-strip">
+  <span class="icon">💡</span>
+  <p>Este recurso activa lo que ya aprendiste. <strong>No es nuevo contenido</strong> — son los conceptos clave de la sesión 1 organizados para que tu memoria los reconozca al instante. Léelo antes de la sesión 2.</p>
+</div>
+
+<!-- SECCIÓN 1: DEFINICIÓN CENTRAL -->
+<div class="section-label">
+  <span class="num">01</span>
+  <span class="title">La definición que lo explica todo</span>
+</div>
+
+<div class="def-card">
+  <div class="def-label">Concepto núcleo · ISO 31000</div>
+  <div class="def-text">
+    El riesgo es el <em>efecto de la incertidumbre</em><br>sobre el logro de los objetivos.
+  </div>
+  <div class="def-sub">
+    👉 Donde hay un objetivo → hay incertidumbre → hay variabilidad → hay riesgo potencial.<br>
+    No es algo que <em>va a pasar</em>. Es algo que <em>podría pasar</em>.
+  </div>
+</div>
+
+<!-- SECCIÓN 2: LA CADENA LÓGICA -->
+<div class="section-label">
+  <span class="num">02</span>
+  <span class="title">La cadena lógica del riesgo</span>
+</div>
+
+<div class="chain">
+  <div class="chain-steps">
+    <div class="chain-step">
+      <div class="step-num">01</div>
+      <h4>Estrategia</h4>
+      <p>Plan para lograr un objetivo</p>
+    </div>
+    <div class="chain-step">
+      <div class="step-num">02</div>
+      <h4>Objetivo</h4>
+      <p>Resultado que quiero lograr</p>
+    </div>
+    <div class="chain-step">
+      <div class="step-num">03</div>
+      <h4>Incertidumbre</h4>
+      <p>Variables que amenazan el resultado</p>
+    </div>
+    <div class="chain-step">
+      <div class="step-num">04</div>
+      <h4>Riesgo</h4>
+      <p>Efecto de esa incertidumbre</p>
+    </div>
+    <div class="chain-step">
+      <div class="step-num">05</div>
+      <h4>Control</h4>
+      <p>Lo que mitiga el riesgo</p>
+    </div>
+    <div class="chain-step">
+      <div class="step-num">06</div>
+      <h4>Resultado</h4>
+      <p>Objetivo logrado con seguridad</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 3: ECUACIÓN FUNDAMENTAL -->
+<div class="section-label">
+  <span class="num">03</span>
+  <span class="title">El matrimonio indisoluble</span>
+</div>
+
+<div class="equation-block">
+  <div class="eq-item">
+    <span class="eq-icon">⚠️</span>
+    <div class="eq-label">RIESGO</div>
+    <div class="eq-sub">La amenaza latente</div>
+  </div>
+  <div class="eq-op">+</div>
+  <div class="eq-item">
+    <span class="eq-icon">🛡️</span>
+    <div class="eq-label">CONTROL</div>
+    <div class="eq-sub">La respuesta activa</div>
+  </div>
+  <div class="eq-op">=</div>
+  <div class="eq-item">
+    <span class="eq-icon">✅</span>
+    <div class="eq-label">ASEGURAMIENTO</div>
+    <div class="eq-sub">Garantía de que el control funciona</div>
+  </div>
+</div>
+
+<div class="pull-quote">
+  <p>"No puede existir el uno sin el otro. Riesgo y control son un matrimonio indisoluble."</p>
+  <span>— Wilington Olarte, Sesión 1</span>
+</div>
+
+<!-- SECCIÓN 4: LAS 3 CARAS DE LA INCERTIDUMBRE -->
+<div class="section-label">
+  <span class="num">04</span>
+  <span class="title">Las 3 fuentes de incertidumbre en cualquier proceso</span>
+</div>
+
+<div class="grid grid-3">
+  <div class="card">
+    <span class="card-icon">📊</span>
+    <span class="tag tag-risk">Fuente 1</span>
+    <h3>Variabilidad</h3>
+    <p>Frecuencia con que una situación puede presentarse. Cuántas veces en determinado tiempo puede ocurrir un evento que afecte el proceso.</p>
+  </div>
+  <div class="card">
+    <span class="card-icon">🔀</span>
+    <span class="tag tag-risk">Fuente 2</span>
+    <h3>Complejidad</h3>
+    <p>Actividades o interacciones dentro del proceso que hacen difícil predecir todos los resultados. Se reduce con estandarización.</p>
+  </div>
+  <div class="card">
+    <span class="card-icon">🎲</span>
+    <span class="tag tag-risk">Fuente 3</span>
+    <h3>El Azar</h3>
+    <p>Lo impredecible. Casi no se puede eliminar, pero debe estar siempre dentro de la ecuación. El proceso debe continuar a pesar de él.</p>
+  </div>
+</div>
+
+<!-- SECCIÓN 5: DOS MIRADAS AL RIESGO -->
+<div class="section-label">
+  <span class="num">05</span>
+  <span class="title">Dos formas de ver el riesgo</span>
+</div>
+
+<div class="matrix-block">
+  <div class="matrix-grid">
+    <div class="matrix-cell mc-tl">
+      <div class="mc-title">🌱 Crear Valor</div>
+      <ul>
+        <li>Ver el riesgo como oportunidad</li>
+        <li>Actitud proactiva y preventiva</li>
+        <li>Analizar escenarios antes de actuar</li>
+        <li>"En medio de crisis surgen oportunidades"</li>
+      </ul>
+    </div>
+    <div class="matrix-cell mc-tr">
+      <div class="mc-title">🔥 Crisis (reactivo)</div>
+      <ul>
+        <li>Ver el riesgo como amenaza paralizante</li>
+        <li>Actitud reactiva: apagar incendios</li>
+        <li>Esperar la materialización para actuar</li>
+        <li>"Siempre lo hemos hecho así"</li>
+      </ul>
+    </div>
+    <div class="matrix-cell mc-bl">
+      <div class="mc-title" style="color:var(--teal)">🛡️ Proteger Valor</div>
+      <ul>
+        <li>Blindar los procesos existentes</li>
+        <li>Controles que evitan pérdidas</li>
+        <li>Aseguramiento continuo</li>
+        <li>Estandarizar para reducir variabilidad</li>
+      </ul>
+    </div>
+    <div class="matrix-cell mc-br">
+      <div class="mc-title">🧭 Cultura de Riesgo</div>
+      <ul>
+        <li>Pensamiento basado en riesgos = preventivo</li>
+        <li>El riesgo es parte de la identidad organizacional</li>
+        <li>Todos leen el mismo riesgo igual</li>
+        <li>No es del experto: es de todos</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 6: QUÉ ES UN CONTROL -->
+<div class="section-label">
+  <span class="num">06</span>
+  <span class="title">Un control puede ser cualquier cosa…</span>
+</div>
+
+<div class="grid grid-3">
+  <div class="card">
+    <span class="card-icon">📄</span>
+    <span class="tag tag-control">Control</span>
+    <h3>Documentos & Procesos</h3>
+    <p>Un acta, procedimiento, manual, guía, política, reglamento, checklist, aprobación en sistema.</p>
+  </div>
+  <div class="card">
+    <span class="card-icon">🔒</span>
+    <span class="tag tag-control">Control</span>
+    <h3>Accesos & Seguridad</h3>
+    <p>Una clave en sistema, una puerta con llave, una firma digital, un visto bueno, una validación de reporte.</p>
+  </div>
+  <div class="card">
+    <span class="card-icon">🤝</span>
+    <span class="tag tag-control">Control</span>
+    <h3>Instancias & Seguros</h3>
+    <p>Un comité, una reunión de revisión, una póliza, un seguro, una auditoría, un indicador de desempeño.</p>
+  </div>
+</div>
+
+<!-- SECCIÓN 7: APETITO AL RIESGO -->
+<div class="section-label">
+  <span class="num">07</span>
+  <span class="title">Apetito al Riesgo — ¿Cuánto tolera la organización?</span>
+</div>
+
+<div class="scale-block">
+  <div class="scale-title">📏 Escala de tolerancia organizacional al riesgo</div>
+  <div class="scale-bar">
+    <div class="scale-seg seg-1">✅ Aceptable</div>
+    <div class="scale-seg seg-2">⚠️ Tolerable</div>
+    <div class="scale-seg seg-3">🚨 Crítico</div>
+    <div class="scale-seg seg-4">🚫 Inaceptable</div>
+  </div>
+  <div class="scale-labels">
+    <span>Proceso viable</span>
+    <span>Requiere atención</span>
+    <span>Acción urgente</span>
+    <span>Proceso inviable</span>
+  </div>
+  <div class="scale-note">
+    🔑 <strong>Regla clave:</strong> El apetito al riesgo no es igual para todos — pero la organización debe estandarizarlo. Lo define la <strong>Alta Dirección</strong>. Se prioriza para los riesgos extremos o críticos (generalmente 5 de 50 riesgos son los que realmente amenazan la continuidad del negocio).
+  </div>
+</div>
+
+<!-- SECCIÓN 8: CONCEPTOS QUE DEBES LLEVARTE -->
+<div class="section-label">
+  <span class="num">08</span>
+  <span class="title">Los 5 conceptos que debes dominar antes de la sesión 2</span>
+</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <span class="tag tag-key">Concepto 1</span>
+    <h3>🎯 Pensamiento Basado en Riesgos</h3>
+    <p>Pensar de forma <strong>preventiva, predictiva y proactiva</strong> sobre lo que podría afectar mis objetivos. No es pesimismo: es visión 360° antes de que ocurra el problema.</p>
+  </div>
+  <div class="card">
+    <span class="tag tag-key">Concepto 2</span>
+    <h3>📐 Riesgo Inherente vs. Residual</h3>
+    <p><strong>Inherente:</strong> el riesgo antes de aplicar controles. <strong>Residual:</strong> lo que queda después de los controles. El objetivo es que el residual esté dentro del apetito definido.</p>
+  </div>
+  <div class="card">
+    <span class="tag tag-key">Concepto 3</span>
+    <h3>🔗 Estandarizar = Reducir incertidumbre</h3>
+    <p>Cuando estandarizas variables en un proceso, reduces incertidumbre. Procesos bien definidos hacen que identificar riesgos y controles sea natural y fácil.</p>
+  </div>
+  <div class="card">
+    <span class="tag tag-key">Concepto 4</span>
+    <h3>🏛️ El Riesgo es Organizacional</h3>
+    <p>El riesgo no es tuyo ni mío: es de la organización. Todos en el mismo proceso deben leer el mismo riesgo de la <strong>misma manera</strong>. La lectura unificada es clave.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-strip">
+  <p>
+    <strong>Sesión 1 completada ✓</strong><br>
+    Facilitador: Wilington Olarte · Coordinación: Valentina Pinillos<br>
+    Recurso preparado como activador de memoria para la Sesión 2.
+  </p>
+</footer>
+
+</body>
+</html>
